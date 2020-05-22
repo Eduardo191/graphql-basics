@@ -72,9 +72,28 @@ const typeDefs = `
   }
 
   type Mutation {
-    createUser(name: String!, email: String!, age: Int): User!
-    createPost(title: String!, body: String!, published: Boolean!, author: ID!): Post!
-    createComment(text: String!, author: ID!, post: ID!): Comment!
+    createUser(data: CreateUserInput!): User!
+    createPost(data: CreatePostInput): Post!
+    createComment(data: CreateCommentInput): Comment!
+  }
+
+  input CreateCommentInput {
+    text: String!
+    author: ID!
+    post: ID!
+  }
+
+  input CreatePostInput {
+    title: String!
+    body: String!
+    published: Boolean!
+    author: ID!
+  }
+
+  input CreateUserInput {
+    name: String!
+    email: String!
+    age: Int
   }
 
   type User {
@@ -149,7 +168,7 @@ const resolvers = {
   Mutation: {
     createUser(parent, args, ctx, info) {
       const takenEmail = users.some((user) => {
-        return user.email === args.email
+        return user.email === args.data.email
       })
       
       if (takenEmail) {
@@ -158,14 +177,14 @@ const resolvers = {
 
       const user = {
         id: uuid(),
-        ...args
+        ...args.data
       }
 
       users.push(user)
       return user
     },
     createPost(parent, args, ctx, info) {
-      const userExists = users.some((user) => user.id === args.author)
+      const userExists = users.some((user) => user.id === args.data.author)
 
       if (!userExists) {
         throw new Error('User not found')
@@ -173,7 +192,7 @@ const resolvers = {
 
       const post = {
         id: uuid(),
-        ...args
+        ...args.data
       }
 
       posts.push(post)
@@ -181,9 +200,9 @@ const resolvers = {
       return post
     }, 
     createComment(parent, args, ctx, info) {
-      const userExists = users.some((user) => user.id === args.author)
+      const userExists = users.some((user) => user.id === args.data.author)
       const postExists = posts.some((post) => {
-        return post.id === args.post && post.published
+        return post.id === args.data.post && post.published
       })
 
       if (!userExists || !postExists) {
@@ -192,7 +211,7 @@ const resolvers = {
 
       const comment = {
         id: uuid(),
-        ...args
+        ...args.data
       }
 
       comments.push(comment)
