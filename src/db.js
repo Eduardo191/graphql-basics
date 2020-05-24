@@ -59,9 +59,9 @@ const users = [{
   }]
  
 const db = {
-    users,
-    posts,
-    comments
+  users,
+  posts,
+  comments
 }
 
-export default { db }
+export { db as default }
