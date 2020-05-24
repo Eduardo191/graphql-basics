@@ -45,6 +45,27 @@ const Mutation = {
 
       return user
     },
+    updatePost(parent, args, { db }, info) {
+      const post = db.posts.find((post) => args.id === post.id)
+
+      if (!post) {
+        throw new Error('Post not found')
+      }
+
+      if (typeof args.data.title === 'string') {
+        post.title = args.data.title
+      }
+
+      if (typeof args.data.body === 'string') {
+        post.body = args.data.body
+      }
+
+      if (typeof args.data.published === 'boolean') {
+        post.published = args.data.published
+      }
+
+      return post
+    },
     deleteUser(parent, args, { db }, info) {
       const userIndex = db.users.findIndex((user) => user.id === args.id)
 
@@ -125,6 +146,19 @@ const Mutation = {
       }
 
       db.comments.push(comment)
+      return comment
+    },
+    updateComment(parent, args, { db }, info) {
+      const comment = db.comments.find((comment) => args.id === comment.id)
+
+      if (!comment) {
+        throw new Error('Comment not found')
+      }
+
+      if (typeof args.data.text === 'string') {
+        comment.text = args.data.text
+      }
+
       return comment
     }
 }

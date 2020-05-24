@@ -11,9 +11,21 @@
     updateUser(id: ID!, data: UpdateUserInput!): User!
     deleteUser(id: ID!): User!
     createPost(data: CreatePostInput): Post!
+    updatePost(id: ID!, data: UpdatePostInput): Post!
     deletePost(id: ID!): Post!
     createComment(data: CreateCommentInput): Comment!
+    updateComment(id: ID!, data: UpdateCommentInput): Comment!
     deleteComment(id: ID!): Comment!
+  }
+
+  input UpdateCommentInput {
+    text: String!
+  }
+
+  input UpdatePostInput {
+    title: String
+    body: String
+    published: Boolean
   }
 
   input UpdateUserInput {
