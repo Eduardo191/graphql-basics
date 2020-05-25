@@ -18,6 +18,11 @@
     deleteComment(id: ID!): Comment!
   }
 
+  type Subscription {
+    comment(postId: ID!): Comment!
+    post: Post!
+  }
+
   input UpdateCommentInput {
     text: String!
   }
